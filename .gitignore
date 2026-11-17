@@ -1,0 +1,16 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+**/wifi_secrets.h
+**/mqtt_secrets.h
+**/switch_secrets.h
+windows/pc_power_toggle.config.psd1
+
+# Private keys and local artifacts
+*.pem
+*.key
+*.ppk
+*.log
+Thumbs.db
+Desktop.ini

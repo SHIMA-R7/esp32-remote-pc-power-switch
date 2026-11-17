@@ -1,0 +1,55 @@
+openapi: 3.1.0
+info:
+  title: PC Power Switch
+  version: 1.0.0
+  description: >-
+    Sends one wake request to an ESP32 through Adafruit IO. This is a momentary
+    motherboard power-switch press, not a power-state query.
+servers:
+  - url: https://io.adafruit.com
+paths:
+  /api/v2/YOUR_ADAFRUIT_USERNAME/feeds/pc-power-command/data:
+    post:
+      operationId: requestPcPowerOn
+      summary: Send one PC power-on request
+      description: >-
+        Publish the fixed command value 1 once. The ESP32 converts it to one
+        short PWR_SW pulse. Call only when the user explicitly asks to start
+        this PC. The API cannot tell whether the PC is already running; if
+        that is unclear, ask first because this is a physical power-button press.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - value
+              properties:
+                value:
+                  type: string
+                  enum:
+                    - "1"
+                  description: Fixed press command. No other value is allowed.
+            example:
+              value: "1"
+      responses:
+        "200":
+          description: The command data point was created.
+        "201":
+          description: The command data point was created.
+        "400":
+          description: Invalid request.
+        "401":
+          description: Adafruit IO authentication failed.
+        "429":
+          description: Adafruit IO rate limit reached.
+      security:
+        - AdafruitIOKey: []
+components:
+  securitySchemes:
+    AdafruitIOKey:
+      type: apiKey
+      in: header
+      name: X-AIO-Key
